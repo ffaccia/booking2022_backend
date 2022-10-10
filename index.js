@@ -1,31 +1,49 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import { connectDB } from "./connect/db.js";
-import authRouter from "./routes/auth.js"
-import usersRouter from "./routes/users.js"
-import hotelsRouter from "./routes/hotels.js"
-import roomsRouter from "./routes/rooms.js"
+import { connectDB } from "./api/connect/db.js";
+import authRouter from "./api/routes/auth.js"
+import usersRouter from "./api/routes/users.js"
+import hotelsRouter from "./api/routes/hotels.js"
+import roomsRouter from "./api/routes/rooms.js"
 
 const app = express()
+app.use(express.json());   
 
-app.use("/auth", authRouter)
-app.use("/rooms", roomsRouter)
-app.use("/hotels", hotelsRouter)
-app.use("/users", usersRouter)
 
-if (process.env.NODE_ENV === "test")
+if (process.env.NODE_ENV === "test") {
+    console.log("fraaa")
     //require("dotenv").parse()
     //const result = dotenv.config()
     dotenv.config({ path: './.env' })
-else if (process.env.NODE_ENV === "production")
-    dotenv.config({ path: './.env_prod' })
+} else {
+   if (process.env.NODE_ENV === "production")
+       dotenv.config({ path: './.env_prod' })
 
+}    
 
 
 console.log(process.env.NODE_ENV)
 
-const port = process.env.NODE_PORT || 5000;
+const port = process.env.NODE_PORT || 3000;
+
+app.use((req, res, next) => {
+    console.log("im a before middleware")
+    //res.json("im a before middleware sending something")
+    return next()
+})
+
+app.use("/api/auth", authRouter)
+app.use("/api/rooms", roomsRouter)
+app.use("/api/hotels", hotelsRouter)
+app.use("/api/users", usersRouter)
+
+//error handling parachute middleware
+app.use((err, req, res, next) => {
+    const errorStatus = err.errorStatus || 500
+    const errorMsg = err.errorMsg || "Something went wrong!"
+    res.status(errorStatus).json(`Status Error: ${errorStatus}. ${errorMsg}`)
+})
 
 /*
 //mongoose.connect('mongodb://host1:port1/?replicaSet=rsName');
@@ -44,7 +62,7 @@ db.once("open", () => console.log("mongoose connected!"))
 const start = async () => {
     try {
         await connectDB(`${process.env.MONGO_URI}`);
-        app.listen(port, () => {
+        app.listen(port, '0.0.0.0', () => {
             console.log(`Server is listening on ${process.env.MONGO_URI} on port ${port}...`)
 
             //console.log(router)

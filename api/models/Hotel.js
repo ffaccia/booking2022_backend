@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 
-const HotelSchema = new moongose.Schema({
+const HotelSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        uppercase: true
     },
     type: {
         type: String,
@@ -46,6 +47,10 @@ const HotelSchema = new moongose.Schema({
         type: Boolean,
         required: true
     },
+    shut: {
+        type: Boolean,
+        required: true
+    }
 },
     { timestamps: true }
 )

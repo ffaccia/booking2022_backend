@@ -1,0 +1,14 @@
+ {
+    "name": "EXCELSIOR",
+    "type": "hotel",
+    "city": "berlin",
+    "adress": "alexander Platz",
+    "distance": "500mt",
+    //"photos": "EXCELSIOR",
+    "desc": "Best hotel in town",
+    "rating": "5stars",
+    "cheapest": 100,
+    "featured": false,
+    "shut": false
+ }
+    
