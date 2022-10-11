@@ -5,6 +5,7 @@ import { connectDB } from "./api/connect/db.js";
 import authRouter from "./api/routes/auth.js"
 import usersRouter from "./api/routes/users.js"
 import hotelsRouter from "./api/routes/hotels.js"
+import mw_errors from "./api/controllers/errors.js"
 import roomsRouter from "./api/routes/rooms.js"
 
 const app = express()
@@ -12,7 +13,7 @@ app.use(express.json());
 
 
 if (process.env.NODE_ENV === "test") {
-    console.log("fraaa")
+    
     //require("dotenv").parse()
     //const result = dotenv.config()
     dotenv.config({ path: './.env' })
@@ -39,11 +40,7 @@ app.use("/api/hotels", hotelsRouter)
 app.use("/api/users", usersRouter)
 
 //error handling parachute middleware
-app.use((err, req, res, next) => {
-    const errorStatus = err.errorStatus || 500
-    const errorMsg = err.errorMsg || "Something went wrong!"
-    res.status(errorStatus).json(`Status Error: ${errorStatus}. ${errorMsg}`)
-})
+app.use(mw_errors)
 
 /*
 //mongoose.connect('mongodb://host1:port1/?replicaSet=rsName');
