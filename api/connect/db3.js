@@ -1,4 +1,6 @@
-export const wrapper = (url) => {
+import mongoose from "mongoose"
+
+export const wrapperConnect = (url) => {
    
     mongoose.connect(url, {
       useNewUrlParser: true,
@@ -11,7 +13,7 @@ export const wrapper = (url) => {
     
     conn.once('open', () => console.info('Connection to Database is successful'));
     
-    module.exports = conn;
+    return conn
     
 }
     

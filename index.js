@@ -1,17 +1,20 @@
 import express from "express";
-import dotenv from "dotenv";
+//import dotenv from "dotenv";
 import mongoose from "mongoose";
-import { connectDB } from "./api/connect/db.js";
+import { wrapperConnect } from "./api/connect/db3.js";
 import authRouter from "./api/routes/auth.js"
 import usersRouter from "./api/routes/users.js"
 import hotelsRouter from "./api/routes/hotels.js"
 import mw_errors from "./api/controllers/errors.js"
 import roomsRouter from "./api/routes/rooms.js"
+import do_dotenv from "./api/config/config.js"
 
 const app = express()
 app.use(express.json());   
 
+do_dotenv()
 
+/*
 if (process.env.NODE_ENV === "test") {
     
     //require("dotenv").parse()
@@ -22,7 +25,7 @@ if (process.env.NODE_ENV === "test") {
        dotenv.config({ path: './.env_prod' })
 
 }    
-
+*/
 
 console.log(process.env.NODE_ENV)
 
@@ -58,7 +61,7 @@ db.once("open", () => console.log("mongoose connected!"))
 
 const start = async () => {
     try {
-        await connectDB(`${process.env.MONGO_URI}`);
+        await wrapperConnect(`${process.env.MONGO_URI}`);
         app.listen(port, '0.0.0.0', () => {
             console.log(`Server is listening on ${process.env.MONGO_URI} on port ${port}...`)
 
