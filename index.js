@@ -1,3 +1,5 @@
+/* set NODE_ENV=test from command line before start */
+
 import express from "express";
 //import dotenv from "dotenv";
 import mongoose from "mongoose";
@@ -13,7 +15,7 @@ const app = express()
 app.use(express.json());   
 
 do_dotenv()
-
+ 
 /*
 if (process.env.NODE_ENV === "test") {
     
