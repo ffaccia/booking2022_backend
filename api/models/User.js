@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        minlength: 6,
+        minlength: 8,
         maxlength: 20
     },
     salt: {
@@ -38,7 +38,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: "italia"
     },
-},    
+},
     { timestamps: true }
 )
 
@@ -48,13 +48,13 @@ UserSchema.pre('save', function (next) {
     if (!user.isModified('password')) return next();
 
     // generate a salt
-    bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
+    bcrypt.genSalt(SALT_WORK_FACTOR, function (err, salt) {
         if (err) return next(CreateError(401, "Error saving password!"));
         //console.log("arrivato qui ", salt)
-    // hash the password along with our new salt
-        bcrypt.hash(user.password, salt, function(err, hash) {
+        // hash the password along with our new salt
+        bcrypt.hash(user.password, salt, function (err, hash) {
             if (err) return next(CreateError(401, "Error saving password (2)!"));
-            
+
             console.log("hash: ", hash)
             // override the cleartext password with the hashed one
             user.password = hash;

@@ -2,11 +2,13 @@ import express from "express";
 import { MongoBatchReExecutionError } from "mongodb";
 import Hotel from "../models/Hotel.js";
 import asyncWrapper from "../controllers/utils.js";
-import { getHotel, 
-         updateHotel, 
-         insert_hotel, 
-         insert_hotel2, 
-         deleteHotel } from "../controllers/hotels.js";
+import {
+  getHotel,
+  updateHotel,
+  insert_hotel,
+  insert_hotel2,
+  deleteHotel
+} from "../controllers/hotels.js";
 import { isNull } from "../commons/_Gen090.js";
 
 const router = express.Router();
@@ -56,7 +58,7 @@ User.findByIdAndUpdate(id, {
 
 
 router.get("/hotels", (req, res) => {
-    res.send("auth route from booking2022")
+  res.send("auth route from booking2022")
 })
 
 export default router

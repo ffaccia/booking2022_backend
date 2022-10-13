@@ -3,6 +3,7 @@
 import express from "express";
 //import dotenv from "dotenv";
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser"
 import { wrapperConnect } from "./api/connect/db3.js";
 import authRouter from "./api/routes/auth.js"
 import usersRouter from "./api/routes/users.js"
@@ -11,11 +12,15 @@ import mw_errors from "./api/controllers/errors.js"
 import roomsRouter from "./api/routes/rooms.js"
 import do_dotenv from "./api/config/config.js"
 
-const app = express()
-app.use(express.json());   
-
 do_dotenv()
- 
+
+const app = express()
+
+app.use(cookieParser());
+app.use(express.json());
+
+
+
 /*
 if (process.env.NODE_ENV === "test") {
     
