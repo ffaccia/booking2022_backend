@@ -8,12 +8,12 @@ import { wrapperConnect } from "../connect/db3.js"
 
 console.log(`${process.env.MONGO_URI}`)
 
-const conn = wrapperConnect(`${process.env.MONGO_URI}`)
+let conn = wrapperConnect(`${process.env.MONGO_URI}`)
 
 const asyncWrapper = (fn) => {
     return async (req, res, next) => {
-        if (!conn)
-            conn = wrapperConnect(`${process.env.MONGO_URI}`)
+        //if (!conn)
+        conn = wrapperConnect(`${process.env.MONGO_URI}`)
 
         const session = await conn.startSession();
         try {
@@ -21,6 +21,7 @@ const asyncWrapper = (fn) => {
             console.log("start transaction")
             await fn(req, res, next, session)
             await session.commitTransaction();
+            console.log("commit transaction")
         } catch (error) {
             console.log(error)
             await session.abortTransaction();
@@ -28,6 +29,7 @@ const asyncWrapper = (fn) => {
             next(error)
         }
         session.endSession();
+        console.log("end session")
     }
 }
 

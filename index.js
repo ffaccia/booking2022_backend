@@ -16,7 +16,7 @@ do_dotenv()
 
 const app = express()
 
-app.use(cookieParser());
+app.use(cookieParser(process.env.JWT_SECRET));
 app.use(express.json());
 
 
