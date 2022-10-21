@@ -23,8 +23,7 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        minlength: 8,
-        maxlength: 20
+
     },
     salt: {
         type: String,
@@ -69,6 +68,24 @@ UserSchema.methods.comparePassword = async (candidatePassword, password) => {
 }
 
 
+/*
+UserSchema.methods.countUsers = function (id, email, callback) {
+    var output;
+    db.collection('users').find({
+        $or: [
+            {
+                facebookID: id
+            },
+            {
+                email: email
+            }
+        ]
+    }).count(function (err, numOfDocs) {
+        callback(err, numOfDocs);
+    });
+    //return output;
+}
+*/
 
 /*
 UserSchema.methods.isModified = (candidatePassword) => {
