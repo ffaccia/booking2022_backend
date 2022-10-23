@@ -45,10 +45,7 @@ const login = asyncWrapper(async (req, res, next, session) => {
 
     const user = await User.findOne({ email: email })
     if (!user) next(CreateError(500, "email not found!"))
-    console.log("ttttttt")
-    console.log(password)
-    console.log(user.password)
-    console.log("ttttttt")
+ 
 
     const passwordOk = await user.comparePassword(password, user.password);
     if (!passwordOk) {

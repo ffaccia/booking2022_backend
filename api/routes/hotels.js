@@ -2,24 +2,28 @@ import express from "express";
 import { MongoBatchReExecutionError } from "mongodb";
 import Hotel from "../models/Hotel.js";
 import asyncWrapper from "../controllers/utils.js";
+import { verifyAdmin } from "../controllers/middlewares.js";
 import {
   getHotel,
   updateHotel,
   insert_hotel,
   insert_hotel2,
-  deleteHotel
+  deleteHotel,
+  getCountHotelsByCity
 } from "../controllers/hotels.js";
 import { isNull } from "../commons/_Gen090.js";
 
 const router = express.Router();
 
-router.post("/new", insert_hotel2)
+router.post("/new", verifyAdmin, insert_hotel2)
 
 router.get("/select/:id", getHotel)
 
-router.put("/update/:id", updateHotel)
+router.get("/countbycities", getCountHotelsByCity)
 
-router.delete("/delete/:id", deleteHotel)
+router.put("/update/:id", verifyAdmin, updateHotel)
+
+router.delete("/delete/:id", verifyAdmin, deleteHotel)
 
 
 

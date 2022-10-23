@@ -3,8 +3,7 @@ import { CreateError } from "./errors.js";
 
 export const verifyToken = async (req, res, next) => {
     let token;
-    console.log("primaprima istokenvalid")
-    console.log(req.cookies)
+
     // check header
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith('Bearer')) {
@@ -18,12 +17,11 @@ export const verifyToken = async (req, res, next) => {
 
     if (!token) {
         //throw new CustomError.UnauthenticatedError('Authentication invalid');
-        next(CreateError(403, "Unauthenticated erro!"))
+        next(CreateError(403, "Authentication error. token is missing!"))
 
     }
     try {
-        console.log("prima istokenvalidkkk")
-        console.log(token)
+
         const payload = isTokenValid(token);
 
         // Attach the user and his permissions to the req object
@@ -31,8 +29,7 @@ export const verifyToken = async (req, res, next) => {
             id: payload.user._id, //_id.toString(),
             admin: payload.user.isadmin
         };
-        console.log("dopo istokenvalid")
-        console.log(payload)
+
 
         next();
     } catch (error) {
@@ -48,6 +45,14 @@ export const verifyUser = (req, res, next) => {
             next()
         else
             next(CreateError(403, "User is not authorized to perform this operation!"))
+    })
+}
+
+export const verifyAdmin = (req, res, next) => {
+    verifyToken(req, res, next, () => {
+        if (req.user.isadmin)
+            next()
+        next(CreateError(403, "User is not authorized to perform this operation!"))
     })
 }
 

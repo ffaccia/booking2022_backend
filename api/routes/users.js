@@ -12,7 +12,7 @@ router.get("/checkauth", verifyToken, (req, res, next) => {
 })
 
 
-router.get("/:id", userRes.getUser)
+router.get("/:id", verifyUser, userRes.getUser)
 
 router.delete("/delete/:id", userRes.deleteUser)
 
