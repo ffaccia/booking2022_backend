@@ -3,6 +3,7 @@
 import express from "express";
 //import dotenv from "dotenv";
 import mongoose from "mongoose";
+import cors from "cors";
 import cookieParser from "cookie-parser"
 import { wrapperConnect } from "./api/connect/db3.js";
 import authRouter from "./api/routes/auth.js"
@@ -16,6 +17,7 @@ do_dotenv()
 
 const app = express()
 
+app.use(cors())
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(express.json());
 
@@ -43,6 +45,19 @@ app.use((req, res, next) => {
     //res.json("im a before middleware sending something")
     return next()
 })
+
+/*
+var whitelist = ['http://127.0.0.1', 'localhost']
+var corsOptions = {
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by CORS'))
+        }
+    }
+}
+*/
 
 app.use("/api/auth", authRouter)
 app.use("/api/rooms", roomsRouter)

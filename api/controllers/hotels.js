@@ -17,6 +17,25 @@ export const getHotel = asyncWrapper(async (req, res, next, session) => {
     res.status(200).json(hotel);
 })
 
+export const findHotel = asyncWrapper(async (req, res, next, session) => {
+
+    const { min, max, ...otherWhere } = req.query
+    console.log(min, max, otherWhere, req.query.limit)
+    
+    try {
+        const hotel =
+            await Hotel.find({
+                ...otherWhere,
+                cheapest: { $gte: min || 1, $lte: max || 99999 }
+            }).limit(req.query.limit);
+
+            res.status(200).json(hotel); 
+    } catch (error) {
+        return next(CreateError(500, "request error! req.query error!"))
+    }
+
+})
+
 
 
 export const insert_hotel = asyncWrapper(async (req, res, next, session) => {
@@ -131,11 +150,23 @@ export const getCountHotelsByCity = asyncWrapper(async (req, res, next) => {
 
     const list = await Promise.all(cities.map(async (city) => {
         var cnt = await Hotel.countDocuments({ city: city })
-        console.log("cnt ", city, " vale ", cnt)
-        var obj = {}
-        obj['city'] = city
-        obj['count'] = cnt
-        return obj
+        //console.log("cnt ", city, " vale ", cnt)
+
+        return { city: city, count: cnt }
+    }))
+    console.log(list)
+    res.status(200).json(list)
+
+})
+
+
+export const getCountByTypes = asyncWrapper(async (req, res, next) => {
+    const types = ["hotel", "cabin", "villa", "apartment", "resort"]
+
+    const list = await Promise.all(types.map(async (type) => {
+        var cnt = await Hotel.countDocuments({ type: type })
+
+        return { type: type, count: cnt }
     }))
     //console.log(list)
     res.status(200).json(list)

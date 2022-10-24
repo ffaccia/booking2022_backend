@@ -5,11 +5,13 @@ import asyncWrapper from "../controllers/utils.js";
 import { verifyAdmin } from "../controllers/middlewares.js";
 import {
   getHotel,
+  findHotel,
   updateHotel,
   insert_hotel,
   insert_hotel2,
   deleteHotel,
-  getCountHotelsByCity
+  getCountHotelsByCity,
+  getCountByTypes,
 } from "../controllers/hotels.js";
 import { isNull } from "../commons/_Gen090.js";
 
@@ -19,7 +21,10 @@ router.post("/new", verifyAdmin, insert_hotel2)
 
 router.get("/select/:id", getHotel)
 
+router.get("/findhotel", findHotel)
+
 router.get("/countbycities", getCountHotelsByCity)
+router.get("/countbytypes", getCountByTypes)
 
 router.put("/update/:id", verifyAdmin, updateHotel)
 
