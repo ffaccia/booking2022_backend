@@ -21,15 +21,22 @@ export const findHotel = asyncWrapper(async (req, res, next, session) => {
 
     const { min, max, ...otherWhere } = req.query
     console.log(min, max, otherWhere, req.query.limit)
-    
+
+    //let regexp_city
+    //if (req.query.city)
+    //    regexp_city = new RegExp(city.replace(/\s+/, "\\s+"), "gi");
+
+
     try {
         const hotel =
             await Hotel.find({
                 ...otherWhere,
+
+                //city: { $regex: regexp_city },
                 cheapest: { $gte: min || 1, $lte: max || 99999 }
             }).limit(req.query.limit);
-
-            res.status(200).json(hotel); 
+        console.log(hotel)
+        res.status(200).json(hotel);
     } catch (error) {
         return next(CreateError(500, "request error! req.query error!"))
     }
@@ -139,7 +146,8 @@ export const old_getCountHotelsByCity = asyncWrapper(async (req, res, next) => {
 
 export const getCountHotelsByCity = asyncWrapper(async (req, res, next) => {
     const cities = req.query.cities.toString()
-        .replace(/\s/g, '')
+        //.replace(/\s/g, '')     //strip way spaces at cities like "san pietroburgo"
+        .trim()
         .toUpperCase()
         .split(",");
 
