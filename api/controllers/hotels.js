@@ -11,7 +11,7 @@ export const getHotel = asyncWrapper(async (req, res, next, session) => {
         return next(CreateError(500, "request error! req.params.id is null!"))
 
     console.log("im an hotel route")
-    console.log(session)
+    console.log(req.params.id)
 
     const hotel = await Hotel.findById(req.params.id);
     res.status(200).json(hotel);
@@ -20,7 +20,7 @@ export const getHotel = asyncWrapper(async (req, res, next, session) => {
 export const findHotel = asyncWrapper(async (req, res, next, session) => {
 
     const { min, max, ...otherWhere } = req.query
-    console.log(min, max, otherWhere, req.query.limit)
+    //console.log(min, max, otherWhere, req.query.limit)
 
     //let regexp_city
     //if (req.query.city)
@@ -35,7 +35,7 @@ export const findHotel = asyncWrapper(async (req, res, next, session) => {
                 //city: { $regex: regexp_city },
                 cheapest: { $gte: min || 1, $lte: max || 99999 }
             }).limit(req.query.limit);
-        console.log(hotel)
+        //console.log(hotel)
         res.status(200).json(hotel);
     } catch (error) {
         return next(CreateError(500, "request error! req.query error!"))
@@ -83,8 +83,8 @@ export const updateHotel = asyncWrapper(async (req, res, next, session) => {
         //if ((req.body.rating)) // req.params.id)) 
         return next(CreateError(500, "request error! req.body.rating is not a number!"))
 
-    console.log("im an hotel route")
-    console.log(session)
+    //console.log("im an hotel route")
+    //console.log(session)
 
     const updateHotel =
         await Hotel.findByIdAndUpdate(req.params.id,         //where
@@ -101,7 +101,7 @@ export const updateHotel = asyncWrapper(async (req, res, next, session) => {
                 } else {
                     res.status(200).json(hotel);
                 }
-                console.log(hotel);
+                //console.log(hotel);
 
             })
             .catch(e => {
@@ -131,7 +131,7 @@ export const old_getCountHotelsByCity = asyncWrapper(async (req, res, next) => {
         .toUpperCase()
         .split(",");
 
-    console.log(cities)
+    //console.log(cities)
 
     if (cities.length == 0)
         next(CreateError(404, "City not entered!"))
@@ -151,7 +151,7 @@ export const getCountHotelsByCity = asyncWrapper(async (req, res, next) => {
         .toUpperCase()
         .split(",");
 
-    console.log(cities)
+    //console.log(cities)
 
     if (cities.length == 0)
         next(CreateError(404, "City not entered!"))
@@ -162,7 +162,7 @@ export const getCountHotelsByCity = asyncWrapper(async (req, res, next) => {
 
         return { city: city, count: cnt }
     }))
-    console.log(list)
+    //console.log(list)
     res.status(200).json(list)
 
 })
@@ -180,3 +180,4 @@ export const getCountByTypes = asyncWrapper(async (req, res, next) => {
     res.status(200).json(list)
 
 })
+
