@@ -1,6 +1,7 @@
 import asyncWrapper from "./utils.js";
 import mw_errors, { CreateError } from "./errors.js";
 import Hotel from "../models/Hotel.js";
+import Room from "../models/Room.js";
 import { isNull } from "../commons/_Gen090.js";
 
 
@@ -181,3 +182,19 @@ export const getCountByTypes = asyncWrapper(async (req, res, next) => {
 
 })
 
+export const getHotelRooms = async (req, res, next) => {
+    try {
+        let list;
+        const hotel = await Hotel.findById(req.params.id)
+        if(hotel) {
+            list = await Promise.all(
+                hotel.rooms.map((room) => {
+                    return Room.findById(room);
+                })
+            );
+            }
+        res.status(200).json(list)
+    } catch (err) {
+        next(err);
+    }
+};

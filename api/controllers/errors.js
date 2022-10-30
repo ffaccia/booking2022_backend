@@ -5,6 +5,8 @@ export const CreateError = (status, message) => {
     err.errorStatus = status || 500
     err.errorMsg = message || "Custom Server Error"
     err.stack = ""
+    err.response = {}
+    err.response.data = message || "Custom Server Error"
     return err
 }
 
@@ -19,5 +21,11 @@ const mw_errors = (err, req, res, next) => {
     })
 }
 
+export const CreateError2 = (status, message) => {
+    const err = new Error();
+    err.status = status;
+    err.message = message;
+    return err;
+};
 
 export default mw_errors

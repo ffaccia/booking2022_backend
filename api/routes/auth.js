@@ -7,5 +7,7 @@ router.route("/register").post(authRes.register)
 
 router.route("/login").post(authRes.login)
 
+router.route("/logout").get(authRes.logout)
+
 export default router
 

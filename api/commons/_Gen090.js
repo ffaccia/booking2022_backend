@@ -5,3 +5,5 @@ export const isNull = (s) => {
     if (s == null || s === undefined || s === "") return true; 
     return s.toString().trimEnd() == "";
 } 
+
+export const calcFromStr = s => Function(`return(${s})`)();

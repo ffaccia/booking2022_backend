@@ -1,5 +1,5 @@
-
 import jwt from 'jsonwebtoken';
+import { calcFromStr } from "../commons/_Gen090.js"
 
 export const createJWT = (payload) => {
     console.log("payload vale")
@@ -25,13 +25,19 @@ export const attachCookiesToResponse = ({ res, user }) => {
 
     const oneDay = 1000 * 60 * 60 * 24;
 
+    console.log("expires is ", calcFromStr(process.env.JWT_LIFETIME_DATE_OLD))
+    console.log("expires is ", Date.now())
+    console.log("expires is ", new Date(Date.now()))
+    console.log("expires is ", new Date(Date.now() + parseInt(process.env.JWT_LIFETIME_DATE_OLD)))
+
     res.cookie('access-token', token, {
         httpOnly: true,
         //expires: new Date(Date.now() + oneDay),
-        expires: new Date(Date.now() + parseInt(process.env.JWT_LIFETIME_DATE_OLD)),
+        expires: new Date(Date.now() + calcFromStr(process.env.JWT_LIFETIME_DATE_OLD)),
         //maxAge: parseInt(process.env.JWT_LIFETIME),
         secure: process.env.NODE_ENV === 'production',
         //signed: true,
     });
+    return res
 };
 

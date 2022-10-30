@@ -12,6 +12,7 @@ import {
   deleteHotel,
   getCountHotelsByCity,
   getCountByTypes,
+  getHotelRooms
 } from "../controllers/hotels.js";
 import { isNull } from "../commons/_Gen090.js";
 
@@ -30,6 +31,7 @@ router.put("/update/:id", verifyAdmin, updateHotel)
 
 router.delete("/delete/:id", verifyAdmin, deleteHotel)
 
+router.get("/room/:id", getHotelRooms);
 
 
 /* much simpler update /*

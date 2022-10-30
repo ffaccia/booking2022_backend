@@ -9,5 +9,6 @@ router.route("/insert/:id").post(roomRes.insertRoom)
 router.route("/delete/:id/:room").delete(roomRes.deleteRoom)
 
 router.route("/update").post(roomRes.updateRoom)
+router.route("/availability/:id").put(roomRes.updateRoomAvailability);
 
 export default router

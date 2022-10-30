@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 import User from "../models/User.js"
 import asyncWrapper from "./utils.js"
-import { CreateError } from "./errors.js"
+import { CreateError, CreateError2 } from "./errors.js"
 import { isNull } from "../commons/_Gen090.js"
 import { createJWT, attachCookiesToResponse } from "./jwt.js"
 
@@ -36,33 +36,55 @@ const register = asyncWrapper(async (req, res, next, session) => {
 
 
 const login = asyncWrapper(async (req, res, next, session) => {
-    const email = req.body.email
-    const password = req.body.password
-
+    const email = (typeof req.body.email === "object") ? req.body.email[0] : req.body.email
+    const password = (typeof req.body.password === "object") ? req.body.password[0] : req.body.password
+    //const password = req.body.password
+    console.log("valgonooooo")
+    console.log(email)
+    console.log(password)
     if (isNull(email) ||
-        isNull(password))
-        next(CreateError(500, "one or more arguments missing!"))
-
+        isNull(password)) {
+        //console.log("one or more argument is missing")
+        return next(CreateError(500, "one or more arguments missing!"))
+    }
     const user = await User.findOne({ email: email })
-    if (!user) next(CreateError(500, "email not found!"))
- 
-
+    if (!user) {
+        console.log("emailnotfound")
+        return next(CreateError2(500, "email not found!"))
+    }
+    console.log(user)
+    console.log("password")
+    console.log(password)
     const passwordOk = await user.comparePassword(password, user.password);
     if (!passwordOk) {
-        return next(CreateError(500, "wrong password!"))
+        //res.status(403).json({ error: CreateError(404, "wrong password!") })
+        return next(CreateError(401, "wrong password!"))
     }
-    const { password_, isadmin_, ...otherDetails } = user
-    console.log(password_)
-    console.log(isadmin_)
-    console.log(otherDetails)
 
+    const { isadmin, ...otherDetails } = user._doc
+
+    console.log("isadmin ", isadmin)
+    //console.log(otherDetails)
+
+    res.cookie('user1', "francesco1", { maxAge: 10000800 })
     //const token = createJWT({ user: user._id, isadmin: user.isadmin })
     attachCookiesToResponse({ res, user })
-
-    res.status(200).json({ details: { ...otherDetails }, isAdmin: isadmin_, success: true, login: "ok" })
+    res.cookie('user2', "francesco2", { maxAge: 10000800 })
+    console.log("res.getHeaders")
+    console.log(res.getHeaders())
+    //console.log(res.cookie)
+    res.status(200).json({ date: new Date(), details: { ...otherDetails }, isAdmin: isadmin, success: true, login: "ok" })
 
 })
 
+
+
+const logout = asyncWrapper(async (req, res, next, session) => {
+    res.clearCookie('access-token');
+    console.log("entro logout")
+    //res.status(200).json({ date: new Date(), logout: "ok" })
+    res.send("logout") //redirect('/');
+})
 
 
 const test_password = () => {
@@ -99,5 +121,6 @@ const test_password = () => {
 
 export const authRes = {
     register: register,
-    login: login
+    login: login,
+    logout: logout
 }
