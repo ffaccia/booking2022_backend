@@ -9,7 +9,7 @@ import { wrapperConnect } from "./connect/db3.js";
 import { default as doDotEnv } from "./config/config.js";
 
 doDotEnv();
-import { auth_route, user_route } from "./routes/index.js";
+import { auth_route, user_route, getFromGitHub } from "./routes/index.js";
 console.log(process.env.NODE_ENV);
 
 const app = express();
@@ -20,6 +20,22 @@ app.use(express.json());
 const port = process.env.NODE_PORT || 3000;
 
 app.use("/api/user", user_route);
+app.use("/api/auth", auth_route);
+app.use("/api/test", getFromGitHub);
+
+const resp = getFromGitHub("patarkf","https://api.github.com/users");
+
+function getFrom(
+  userName = "patarkf",
+  url = "https://api.github.com/users"
+) {
+  console.log(userName, url);
+  //console.log(`${url}/${userName}/repos`);
+
+}
+getFrom()
+
+/*
 
 app.use((req, res, next) => {
   console.log("im a before middleware");
@@ -27,7 +43,7 @@ app.use((req, res, next) => {
   return next();
 });
 
-/*
+
 //app.get("/api/auth", () => console.log("tuttok"))
 
 

@@ -2,8 +2,13 @@ import express from "express";
 
 const router = express.Router();
 
-router.get("/auth", (req, res, next) => {
-  res.send("auth sempre tutt'ok");
-});
+import { authControllers } from "../controllers/auth.js";
+import { verifyUser, verifyUserAndAdmin } from "../controllers/middlewares.js";
+
+router.post("/register", authControllers.register);
+
+router.post("/login", authControllers.login);
+
+router.put("/:id", verifyUser, authControllers.updateUser);
 
 export default router;
