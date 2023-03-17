@@ -22,9 +22,9 @@ export const createJWT = (payload) => {
 
 export const attachCookiesToResponse = ({ res, payload }) => {
   console.log("attacj");
-  console.log({res});
-  console.log({payload});
-  const user=payload;
+  console.log({ res });
+  console.log({ payload });
+  const user = payload;
   const token = createJWT({ user });
 
   const oneDay = 1000 * 60 * 60 * 24;
@@ -53,10 +53,10 @@ export const attachCookiesToResponse = ({ res, payload }) => {
 };
 
 export const isTokenValid = (token) => {
-  console.log("token tavolta vale");
+  console.log("isTokenValid");
   console.log(token);
 
   const ret = jwt.verify(token, process.env.JWT_SECRET);
-  console.log("ret vale ", ret)
-  return ret
+  console.log("jwt.verify ret vale ", ret);
+  return ret;
 };

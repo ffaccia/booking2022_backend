@@ -21,7 +21,7 @@ const port = process.env.NODE_PORT || 3000;
 
 app.use("/api/user", user_route);
 app.use("/api/auth", auth_route);
-app.use("/api/test", getFromGitHub);
+//app.use("/api/test", getFromGitHub);
 
 const resp = getFromGitHub("patarkf","https://api.github.com/users");
 

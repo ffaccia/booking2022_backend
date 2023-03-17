@@ -3,50 +3,50 @@ import { CreateError } from "./errors.js";
 import UnauthenticatedError from "./unauthenticated.js";
 
 export const verifyToken2 = async (req, res, next, session) => {
-    /* authorization may come from 
+  /* authorization may come from 
        header.authorization
        header.access-token
        cookie.access-token
     */
-    let token;
-  
-    // check header
-    const authHeader = req.headers.authorization || req.headers["access-token"];
-    if (authHeader && authHeader.startsWith("Bearer")) {
-      token = authHeader.split(" ")[1];
-      console.log("authHeader");
-    }
-    // check cookies
-    else if (req.cookies["access-token"]) {
-      token = req.cookies["access-token"];
-      console.log("cookies");
-    }
-    console.log("payload22222 vale");
-    console.log(token);
-  
-    if (!token) {
-      console.log("token is null");
-      //throw new CustomError.UnauthenticatedError('Authentication invalid');
-      return next(res.send(CreateError(403, "Authentication invalid!")));
-    }
-    try {
-      const payload = isTokenValid(token);
-      console.log("payloaddddd vale", payload);
-      // Attach the user and his permissions to the req object
-      req.user = {
-        id: payload.user._id, //_id.toString(),
-        admin: payload.user.isadmin,
-      };
-      console.log("payloadeeeee vale", payload);
-      console.log(next);
-      console.log(next());
-      return true;
-    } catch (error) {
-      //throw new CustomError.UnauthenticatedError('Authentication invalid');
-      return next(res.send(CreateError(403, "Authentication invalid!")));
-    }
-  };
-  
+  let token;
+
+  // check header
+  const authHeader = req.headers.authorization || req.headers["access-token"];
+  if (authHeader && authHeader.startsWith("Bearer")) {
+    token = authHeader.split(" ")[1];
+    console.log("authHeader");
+  }
+  // check cookies
+  else if (req.cookies["access-token"]) {
+    token = req.cookies["access-token"];
+    console.log("cookies");
+  }
+  console.log("payload22222 vale");
+  console.log(token);
+
+  if (!token) {
+    console.log("token is null");
+    //throw new CustomError.UnauthenticatedError('Authentication invalid');
+    return next(res.send(CreateError(403, "Authentication invalid!")));
+  }
+  try {
+    const payload = isTokenValid(token);
+    console.log("payloaddddd vale", payload);
+    // Attach the user and his permissions to the req object
+    req.user = {
+      id: payload.user._id, //_id.toString(),
+      admin: payload.user.isadmin,
+    };
+    console.log("payloadeeeee vale", payload);
+    console.log(next);
+    console.log(next());
+    return true;
+  } catch (error) {
+    //throw new CustomError.UnauthenticatedError('Authentication invalid');
+    return next(res.send(CreateError(403, "Authentication invalid!")));
+  }
+};
+
 export const verifyToken = async (req, res, next, session) => {
   /* authorization may come from 
      header.authorization
@@ -90,6 +90,7 @@ export const verifyToken = async (req, res, next, session) => {
 };
 
 export const verifyUser = (req, res, next) => {
+  console.log("entrato verifyUser");
   if (!verifyToken(req, res, next))
     return next(res.send(CreateError(403, "Authentication invalid!")));
 
@@ -109,7 +110,7 @@ export const verifyUser = (req, res, next) => {
       )
     );
   }
-  //next()
+  next();
 };
 
 export const verifyAdmin = (req, res, next, session) => {

@@ -18,15 +18,13 @@ export const getFromGitHub = (userName, url) => {
       console.log(err);
     });
     */
-   return ""
-}
+  return "";
+};
 
 router.get("/getfromgithub", (req, res, next) => {
-  const resp = getFromGitHub("patarkf","https://api.github.com/users");
+  const resp = getFromGitHub("patarkf", "https://api.github.com/users");
 
   console.log(resp);
   //next()
   //res.("ciao");
 });
-
-
