@@ -57,6 +57,8 @@ export const verifyToken = async (req, res, next, session) => {
 
   // check header
   const authHeader = req.headers.authorization || req.headers["access-token"];
+  //console.log(req.headers)
+  //console.log("authHeader: ", authHeader)
   if (authHeader && authHeader.startsWith("Bearer")) {
     token = authHeader.split(" ")[1];
     console.log("authHeader");
@@ -113,15 +115,17 @@ export const verifyUser = (req, res, next) => {
   next();
 };
 
-export const verifyAdmin = (req, res, next, session) => {
+export const verifyAdmin = (req, res, next) => {
+  console.log("entrato verifyAdmin");
   verifyToken(req, res, next);
 
   console.log("111111");
   console.log(req.user.id);
   console.log(req.params.id);
+  console.log(req.user.admin);
   console.log("222222");
 
-  if (req.user.isadmin) next();
+  if (req.user.admin) next();
   else {
     console.log("nonsonouguali");
     next(
@@ -149,4 +153,9 @@ export const authorizeRoles = (...roles) => {
     }
     next();
   };
+};
+
+export const verifyDummy = (req, res, next) => {
+  console.log("verifyDummy");
+  next();
 };

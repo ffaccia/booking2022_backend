@@ -17,7 +17,6 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: true,
-      unique: true,
       //lowercase: true,
       minlength: 8,
       maxlength: 100,
@@ -38,7 +37,7 @@ const ProductSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      required: True,
+      required: true,
     },
   },
   { timestamps: true }

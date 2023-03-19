@@ -198,72 +198,10 @@ export const deleteUser = asyncWrapper(async (req, res, next, session) => {
     });
 });
 
-export const getUser = asyncWrapper(async (req, res, next, session) => {
-  const id = req.params.id;
-  //const password = req.body.password
-
-  console.log("entrato getUser");
-
-  if (isNull(id)) {
-    //console.log("one or more argument is missing")
-    return next(CreateError(500, "id is missing!"));
-  }
-
-  await User.findById(id, (err, user) => {
-    if (err) {
-      console.log(`User id ${id} does not exist`);
-      res.send(CreateError(404, `User id ${id} does not exist`));
-      res.end();
-      return;
-    }
-
-    if (!user) {
-      console.log(`User id ${id} does not exist(2)`);
-      res.send(CreateError(404, `User id ${id} does not exist(2)`));
-      res.end();
-      return;
-    }
-
-    res.status(200).json({ ...user._doc });
-  });
-});
-
-export const getAllUser = asyncWrapper(async (req, res, next, session) => {
-  //const password = req.body.password
-
-  console.log("entrato getAllUser");
-  console.log(req.query)
-  const query = req.query.new;
-  const fields = req.query.fields
-  
-  let select
-  try{
-
-    select = [...fields.split(",")]
-  } catch(e){
-    console.log(e)
-    select = "*"
-    //return res.status(501).json("error");
-  }
-
-  
-  console.log(select)
-  let users;
-  if (query) users = await User.find().
-                    select(select).
-                     //populateselect({ "username": 0, "isadmin": isadminb }).
-                     sort({ _id: -1 }).limit(5);
-  else users = await User.find();
-
-  res.status(200).json({len: users.length, users: users});
-});
-
 export const authControllers = {
   register: register,
   login: login,
   logout: logout,
   updateUser: updateUser,
   deleteUser: deleteUser,
-  getUser: getUser,
-  getAllUser: getAllUser,
 };
