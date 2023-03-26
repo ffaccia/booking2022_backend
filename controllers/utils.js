@@ -30,4 +30,31 @@ const asyncWrapper = (fn) => {
   };
 };
 
+export const checkBodyFields = (objArray, reqArray, 
+                             allObjFieldsinResp=false,
+                             noExtraFieldsInBody=true) => {
+  //sort not necessary here
+  const objArray2 = objArray.slice(0).sort()
+  const reqArray2 = reqArray.slice(0).sort()
+  
+  //every field must be present in req.body
+  if(allObjFieldsinResp){
+    const ret_allObjFieldsinResp = objArray2.every(value => {
+      return reqArray2.includes(value);
+    });
+    if (!ret_allObjFieldsinResp)
+      return false;
+  } 
+  
+  //no extra body fields must be present in req
+  if(noExtraFieldsInBody){
+    const ret_noExtraFieldsInBody = reqArray2.every(value => {
+      return objArray2.includes(value);
+    });
+    if (!ret_noExtraFieldsInBody)
+      return false;  
+  }
+  return true   
+}
+
 export default asyncWrapper;

@@ -18,8 +18,6 @@ const ProductSchema = new mongoose.Schema(
       trim: true,
       required: true,
       //lowercase: true,
-      minlength: 8,
-      maxlength: 100,
     },
     img: {
       type: String,

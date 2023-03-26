@@ -12,6 +12,10 @@ import {
 
 router.post("/add", verifyAdmin, productControllers.addProduct)
 
-router.put("/:id", verifyAdmin, productControllers.updProduct)
+router.put("/upd/:id", verifyAdmin, productControllers.updProduct)
+
+router.delete("/del/:id", verifyAdmin, productControllers.delProduct)
+
+router.get("/find/", productControllers.findProduct)
 
 export default router

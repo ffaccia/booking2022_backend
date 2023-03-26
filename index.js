@@ -4,18 +4,51 @@ import express from "express";
 //import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import morgan from "morgan";
+
 import { wrapperConnect } from "./connect/db3.js";
-
 import { default as doDotEnv } from "./config/config.js";
-
 doDotEnv();
-import { auth_route, user_route, prod_route, getFromGitHub } from "./routes/index.js";
+
+import {
+  auth_route,
+  user_route,
+  prod_route,
+  getFromGitHub,
+} from "./routes/index.js";
+import { StatusCodes, ReasonPhrases } from "http-status-codes";
+
+import  { dolog, dolog2, dolog3 } from "./logger.js";
+
+/*logger.log({
+  level: "info",
+  message: "ff logger has been started!",
+});
+
+logger.log({
+  level: "info",
+  message: "ff format logger has been started!",
+  timestamp: new Date().getTime()
+});
+
+*/
+//dolog2(" 22new message has been started")
+
+dolog3({
+  //label: "thislabel",
+  //level: "info",
+  message: "z format logger has been started!",
+  //timestamp: new Date().getTime()
+});
+
+
 console.log(process.env.NODE_ENV);
 
 const app = express();
 
 app.use(cookieParser());
 app.use(express.json());
+app.use(morgan('tiny'))
 
 const port = process.env.NODE_PORT || 3000;
 
@@ -24,17 +57,18 @@ app.use("/api/auth", auth_route);
 app.use("/api/product", prod_route);
 //app.use("/api/test", getFromGitHub);
 
-const resp = getFromGitHub("patarkf","https://api.github.com/users");
+const invalidPathHandler = (request, response, next) => {
+  response.status(StatusCodes.NOT_FOUND);
+  response.send({ err: ReasonPhrases.NOT_FOUND, err2: "invalid path" });
+};
 
-function getFrom(
-  userName = "patarkf",
-  url = "https://api.github.com/users"
-) {
+const resp = getFromGitHub("patarkf", "https://api.github.com/users");
+
+function getFrom(userName = "patarkf", url = "https://api.github.com/users") {
   console.log(userName, url);
   //console.log(`${url}/${userName}/repos`);
-
 }
-getFrom()
+getFrom();
 
 /*
 
